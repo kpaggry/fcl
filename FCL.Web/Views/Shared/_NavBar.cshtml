@@ -1,0 +1,77 @@
+﻿@helper ActiveItem(string actionName, string controllerName, string areaName)
+{
+    if (ViewContext.RouteData.Values["action"].ToString() == actionName &&
+            ViewContext.RouteData.Values["controller"].ToString() == controllerName &&
+            (ViewContext.RouteData.DataTokens["area"] == null || ViewContext.RouteData.DataTokens["area"].ToString() == areaName))
+    {
+        @:active
+    }
+}
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index"><img src="~/Images/logo.png" /></a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <div class="nav navbar-nav navbar-right">
+                <section id="login">
+                    @Html.Partial("_LoginPartial")
+                </section>
+            </div>
+            <ul class="nav navbar-nav">
+                @{
+                    if (User.IsInRole("Loans"))
+                    {
+                        <li class="@ActiveItem("Dashboard", "Cheque", null)">@Html.ActionLink("Dashboard", "Dashboard", "Cheque")</li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Manage Clients <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li class="@ActiveItem("ManageClients", "Client", null)">@Html.ActionLink("Manage Clients", "Index", "Client")</li>
+                                <li class="divider"></li>
+                                <li class="@ActiveItem("AddClient", "Client", null)">@Html.ActionLink("Add Client", "Create", "Client")</li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Loan Management <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li class="@ActiveItem("ManageLoans", "Cheque", null)">@Html.ActionLink("Manage Loans", "Index", "Cheque")</li>
+                                <li class="divider"></li>
+                                <li class="@ActiveItem("AddLoan", "Cheque", null)">@Html.ActionLink("Create Loan", "Create", "Cheque")</li>
+                            </ul>
+                        </li>
+                        <li class="@ActiveItem("GenerateReport", "Cheque", null)">@Html.ActionLink("Reports", "GenerateReport", "Cheque")</li>
+                    }
+
+                    if (User.IsInRole("Administrator"))
+                    {
+                        <li class="@ActiveItem("Dashboard", "Admin", null)">@Html.ActionLink("Dashboard", "Dashboard", "Admin")</li>
+                        <li class="@ActiveItem("CreateAdmin", "Admin", null)">@Html.ActionLink("Create Admin", "CreateAdmin", "Admin")</li>
+                        <li class="@ActiveItem("ListBranch", "Admin", null)">@Html.ActionLink("Branches", "ListBranch", "Admin")</li>
+                        <li class="@ActiveItem("ListDse", "Admin", null)">@Html.ActionLink("DSE", "ListDse", "Admin")</li>
+                        <li class="@ActiveItem("ListCompanies", "Admin", null)">@Html.ActionLink("Companies", "ListCompanies", "Admin")</li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Loan Management <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li class="@ActiveItem("Dashboard", "Cheque", null)">@Html.ActionLink("Dashboard", "Dashboard", "Cheque")</li>
+                                <li class="divider"></li>                            
+                                <li class="@ActiveItem("ManageClients", "Client", null)">@Html.ActionLink("Manage Clients", "Index", "Client")</li>
+                                <li class="@ActiveItem("AddClient", "Client", null)">@Html.ActionLink("Add Client", "Create", "Client")</li>
+                                <li class="divider"></li>                                 
+                                <li class="@ActiveItem("ManageLoans", "Cheque", null)">@Html.ActionLink("Manage Loans", "Index", "Cheque")</li>
+                                <li class="@ActiveItem("AddLoan", "Cheque", null)">@Html.ActionLink("Create Loan", "Create", "Cheque")</li>
+                                <li class="divider"></li>
+                                <li class="@ActiveItem("GenerateReport", "Cheque", null)">@Html.ActionLink("Reports", "GenerateReport", "Cheque")</li>
+                            </ul>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+    </div>
+</div>

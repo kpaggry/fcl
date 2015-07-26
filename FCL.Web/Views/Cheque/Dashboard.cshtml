@@ -1,0 +1,208 @@
+﻿@model FCL.Core.Models.DashboardModels
+
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+<script type="text/javascript">
+
+    google.load("visualization", "1", { packages: ["corechart"] });
+    google.setOnLoadCallback(drawChart);
+    google.setOnLoadCallback(drawPieChart);
+    google.setOnLoadCallback(drawStatusPieChart);
+    google.setOnLoadCallback(drawChartMonth);
+    google.setOnLoadCallback(drawPieChartMonth);
+    google.setOnLoadCallback(drawStatusPieChartMonth);
+
+    function drawChart() {
+        var result = '@TempData["BankJson"]';
+        result = JSON.parse(result.replace(/&quot;/g, '"'));
+
+        var data = new google.visualization.DataTable();
+
+        data.addColumn('string', 'Bank Name');
+        data.addColumn('number', 'Value');
+
+        for (var i = 0; i < result.length; i++) {
+            data.addRow([result[i].BankName, result[i].Value]);
+        }
+
+        var options = {
+            title: 'Bank Values',
+            backgroundColor: { fill:'transparent' },
+            //hAxis: {
+            //    title: 'Banks'
+            //},
+            vAxis: {
+                title: 'Amount (Naira)'
+            }
+        };
+
+        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+    }
+
+    function drawPieChart() {
+        var result = '@TempData["PaymentTypes"]';
+        result = JSON.parse(result.replace(/&quot;/g, '"'));
+        console.log(result);
+
+        var data = new google.visualization.DataTable();
+
+        data.addColumn('string', 'PaymentType');
+        data.addColumn('number', 'Value');
+
+        for (var i = 0; i < result.length; i++) {
+            data.addRow([result[i].Type, result[i].ValueDay]);
+        }
+
+        var options = {
+            title: 'Payment Types',
+            backgroundColor: { fill: 'transparent' }
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('pie_chart'));
+        chart.draw(data, options);
+    }
+
+    function drawStatusPieChart() {
+        var result = '@TempData["Status"]';
+        result = JSON.parse(result.replace(/&quot;/g, '"'));
+        console.log(result);
+
+        var data = new google.visualization.DataTable();
+
+        data.addColumn('string', 'Loan Status');
+        data.addColumn('number', 'Value');
+
+        for (var i = 0; i < result.length; i++) {
+            data.addRow([result[i].Type, result[i].ValueDay]);
+        }
+
+        var options = {
+            title: 'Loan Status Type',
+            backgroundColor: { fill: 'transparent' },
+            colors: ['#ece20f', '#32cd32', '#009688', '#006400', '#ff0000', '#a16e6e']
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('pie_chart_status'));
+        chart.draw(data, options);
+    }
+
+    function drawChartMonth() {
+        var result = '@TempData["BankJson"]';
+        result = JSON.parse(result.replace(/&quot;/g, '"'));
+
+        var data = new google.visualization.DataTable();
+
+        data.addColumn('string', 'Bank Name');
+        data.addColumn('number', 'Value');
+
+        for (var i = 0; i < result.length; i++) {
+            data.addRow([result[i].BankName, result[i].ValueMonth]);
+        }
+
+        var options = {
+            title: 'Bank Values',
+            backgroundColor: { fill: 'transparent' },
+            //hAxis: {
+            //    title: 'Banks'
+            //},
+            vAxis: {
+                title: 'Amount (Naira)'
+            }
+        };
+
+        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div_month'));
+        chart.draw(data, options);
+    }
+
+    function drawPieChartMonth() {
+        var result = '@TempData["PaymentTypes"]';
+        result = JSON.parse(result.replace(/&quot;/g, '"'));
+        console.log(result);
+
+        var data = new google.visualization.DataTable();
+
+        data.addColumn('string', 'PaymentType');
+        data.addColumn('number', 'Value');
+
+        for (var i = 0; i < result.length; i++) {
+            data.addRow([result[i].Type, result[i].ValueMonth]);
+        }
+
+        var options = {
+            title: 'Payment Types',
+            backgroundColor: { fill: 'transparent' }
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('pie_chart_month'));
+        chart.draw(data, options);
+    }
+
+    function drawStatusPieChartMonth() {
+        var result = '@TempData["Status"]';
+        result = JSON.parse(result.replace(/&quot;/g, '"'));
+        console.log(result);
+
+        var data = new google.visualization.DataTable();
+
+        data.addColumn('string', 'Loan Status');
+        data.addColumn('number', 'Value');
+
+        for (var i = 0; i < result.length; i++) {
+            data.addRow([result[i].Type, result[i].ValueMonth]);
+        }
+
+        var options = {
+            title: 'Loan Status Type',
+            backgroundColor: { fill: 'transparent' },
+            colors: ['#ece20f', '#32cd32', '#009688', '#006400', '#ff0000', '#a16e6e']
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('pie_chart_status_month'));
+        chart.draw(data, options);
+    }
+</script>
+
+<div class="col-lg-12">
+    <h1 class="page-header">
+        Dashboard <small>Statistics Overview</small>
+    </h1>
+</div>
+
+<div class="row text-center">
+    <div class="col-lg-12">
+        <h2 class="page-header text-center">
+            Today's <small>Values</small>
+        </h2>
+    </div>
+    <div class="col-lg-12">
+        <div id="chart_div"></div>
+    </div>
+    <br />
+    <div class="col-md-6">
+        <div id="pie_chart" style="width: 500px; height: 300px;"></div>
+    </div>
+    <div class="col-lg-6">
+        <div id="pie_chart_status" style="width: 500px; height: 300px;"></div>
+    </div>
+</div>
+
+<div class="row text-center">
+    <div class="col-lg-12">
+        <h2 class="page-header text-center">
+            This Month's <small>Values</small>
+        </h2>
+    </div>
+    <div class="col-lg-12">
+        <div id="chart_div_month"></div>
+    </div>
+    <br />
+    <div class="col-md-6">
+        <div id="pie_chart_month" style="width: 500px; height: 300px;"></div>
+    </div>
+    <div class="col-lg-6">
+        <div id="pie_chart_status_month" style="width: 500px; height: 300px;"></div>
+    </div>
+</div>

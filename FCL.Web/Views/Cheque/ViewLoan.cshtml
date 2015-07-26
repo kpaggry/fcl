@@ -1,0 +1,161 @@
+﻿@model FCL.Core.Models.LoanTransactions
+           @using FCL.Web.Helper
+@{
+    ViewBag.Title = "ViewLoan";
+}
+
+<h2>ViewLoan</h2>
+
+<div class="row">
+        <br />
+        <fieldset>
+            <legend>Loan Information</legend>
+            <div class="loanInfoSection">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <strong>Name:</strong> @Html.DisplayFor(model => model.ClientName)
+                        </div>
+                        <div class="col-sm-6">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <strong>Amount:</strong> ₦@Html.DisplayFor(model => model.TotalAmount)
+                        </div>
+                        <div class="col-sm-6">
+                            <strong>Duration:</strong> @Helper.GetDurationValue(Model.DurationId)
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset>
+        <legend>Payment Mode</legend>
+        <div class="chequePanel">
+
+            <div class="col-sm-12">
+                <div class="col-sm-1">
+                    <h4>Type</h4>
+                </div>
+                <div class="col-sm-2">
+                    <h4>Number</h4>
+                </div>
+                <div class="col-sm-2">
+                    <h4>Choose Bank</h4>
+                </div>
+                <div class="col-sm-2">
+                    <h4>Amount</h4>
+                </div>
+                <div class="col-sm-1">
+                    <h4>Status</h4>
+                </div>
+                <div class="col-sm-2">
+                    <h4>Date Due</h4>
+                </div>
+                <div class="col-sm-1">
+                    <h4>Cash?</h4>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <div id="editorRows" class="chequeSection">
+                        @foreach (var cheque in Model.Cheques)
+                        {
+                           <div class="col-sm-12">
+                                <div class="col-sm-1">
+                                    @Helper.GetPaymentTypeValue(cheque.PaymentTypeId)
+                                </div>
+                                <div class="col-sm-2">
+                                    @Html.DisplayFor(model => cheque.ChequeNumber)
+                                </div>
+                                <div class="col-sm-2">
+                                    @Helper.GetBankValue(cheque.BankId)
+                                </div>
+                                <div class="col-sm-2">
+                                    ₦@Html.DisplayFor(model => cheque.Amount)
+                                </div>
+                                <div class="col-sm-1">
+                                    @Helper.GetStatusValue(cheque.StatusId)
+                                </div>
+                                <div class="col-sm-2">
+                                    @Html.DisplayFor(model => cheque.DateDue)
+                                </div>
+                                @if (cheque.PaidCash)
+                                    {
+                                        <div class="col-sm-1">
+                                            Paid Cash
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="col-sm-1">
+                                            No Cash
+                                        </div>
+                                    }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+        <div class="standIn" style="display: none">
+            <fieldset>
+                <legend>Add Gurantor</legend>
+                <div class="chequePanel">
+
+                    <div class="col-sm-12">
+                        <div class="col-sm-2">
+                            <h4>Name</h4>
+                        </div>
+                        <div class="col-sm-2">
+                            <h4>Phone #</h4>
+                        </div>
+                        <div class="col-sm-2">
+                            <h4>Name On Cheque</h4>
+                        </div>
+                        <div class="col-sm-1">
+                            <h4>Cheque #</h4>
+                        </div>
+                        <div class="col-sm-2">
+                            <h4>Bank</h4>
+                        </div>
+                        <div class="col-sm-1">
+                            <h4>Status</h4>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <div id="editorRow" class="guarantorSection">
+                                <div class="form-group guarantor">
+                                    <div class="col-sm-12">
+                                        <div class="col-sm-2">
+                                            @Html.DisplayFor(model => model.Guarantee.Name)
+                                        </div>
+                                        <div class="col-sm-2">
+                                            @Html.DisplayFor(model => model.Guarantee.PhoneNumber)
+                                        </div>
+                                        <div class="col-sm-2">
+                                            @Html.DisplayFor(model => model.Guarantee.NameOnCheque)
+                                        </div>
+                                        <div class="col-sm-1">
+                                            @Html.DisplayFor(model => model.Guarantee.ChequeNumber)
+                                        </div>
+                                        <div class="col-sm-2">
+                                            @Html.DisplayFor(model => model.Guarantee.Bank)
+                                        </div>
+                                        <div class="col-sm-1">
+                                            @Html.DisplayFor(model => model.Guarantee.Status)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+</div>

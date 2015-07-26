@@ -1,0 +1,57 @@
+﻿@model FCL.Core.Models.ChequeViewModel
+
+<div class="form-group cheques">
+    <div class="col-sm-12">
+        <div class="col-sm-1">
+            @Html.DropDownListFor(model => model.PaymentTypeId, new SelectList((IEnumerable<SelectListItem>)ViewData["PaymentType"], "Value", "Text"), "--Type--", new { @class = "form-control paymentType"})
+        </div>
+        <div class="col-sm-1">
+            @Html.TextBoxFor(model => model.ChequeNumber, new {@class = "form-control chequeNumber", @placeholder = "Number"})
+            @Html.HiddenFor(model => model.IsDelete, new {@class = "form-control chequeDeleted"})
+            @Html.HiddenFor(model => model.ChequeId, new {@class = "form-control chequeId"})
+        </div>
+        <div class="col-sm-2">
+            @Html.DropDownListFor(model => model.BankId, new SelectList((IEnumerable<SelectListItem>) ViewData["Banks"], "Value", "Text"), "--Select Bank--", new {@class = "form-control chequeBankId"})
+        </div>
+        <div class="col-sm-1">
+            @Html.TextBoxFor(model => model.Amount, new {@class = "form-control chequeAmount", @placeholder = "Amount"})
+        </div>
+        <div class="col-sm-1">
+            @Html.DropDownListFor(model => model.StatusId, new SelectList((IEnumerable<SelectListItem>) ViewData["Status"], "Value", "Text"), "--Status--", new {@class = "form-control chequeStatus"})
+        </div>
+        @{
+            if (Model.DateDue.HasValue)
+            {
+                <div class="col-sm-1">
+                    @Html.TextBoxFor(model => model.DateDue, new {@class = "form-control datepicker chequeDueDate", @placeholder = "Date Due"})
+                </div>
+            }
+            else
+            {
+                <div class="col-sm-1">
+                    @Html.TextBoxFor(model => model.DateDue, new {@class = "form-control datepicker chequeDueDate", @placeholder = DateTime.Now.ToShortDateString()})
+                </div>
+            }
+            if (Model.ChequeId > 0)
+            {
+                 <div class="col-sm-1">
+                    @Html.TextBoxFor(model => model.ValueDate, new { @class = "form-control datepicker valueDate", @placeholder = DateTime.Now.ToShortDateString() })
+                </div>
+                <div class="col-sm-2">
+                    @Html.DropDownListFor(model => model.RecievingBank, new SelectList((IEnumerable<SelectListItem>)ViewData["Banks"], "Value", "Text"), "--Select Bank--", new { @class = "form-control recievingBank" })
+                </div>
+            }
+        }
+
+       
+        <div class="col-sm-2 clickOptions">
+            <button class="btn btn-info btn-sm actives addCheque" type="button">
+                <span class="glyphicon glyphicon-plus"></span>
+            </button>
+            <button class="btn btn-danger btn-sm actives removeCheque" type="button">
+                <span class="glyphicon glyphicon-remove"></span>
+            </button>
+        </div>
+    </div>
+</div>
+

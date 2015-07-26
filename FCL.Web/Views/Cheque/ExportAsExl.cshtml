@@ -1,0 +1,92 @@
+﻿@model IEnumerable<FCL.Core.Models.ReportView>
+@using FCL.Web.Helper
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ExportAsExl</title>
+</head>
+<body>
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Loan ID</th>
+                    <th>Client ID</th>
+                    <th>ClientName</th>
+                    <th>Loan Amount</th>
+                    <th>Payment Type</th>
+                    <th>Cheque Number</th>
+                    <th>Bank Name</th>
+                    <th>Status</th>
+                    <th>Date Due</th>
+                    <th>Amount</th>
+                    <th>Value Date</th>
+                    <th>Recieving Bank</th>
+                    <th>Branch</th>
+                    <th>Date Created</th>
+                    <th>DSE</th>
+                    <th>Company</th>
+                    <th>Phone</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    if (Model != null)
+                    {
+                        foreach (var trans in Model)
+                        {
+                            <tr>
+                                <td>@trans.LoanIdFromCore</td>
+                                <td>@trans.ClientIdFromCore</td>
+                                <td>@trans.ClientName</td>
+                                <td>
+                                    @if (@trans.LoanAmount != null)
+                                    {
+                                        @String.Format(new System.Globalization.CultureInfo("yo-NG"), "{0:C}", @Math.Round((decimal)@trans.LoanAmount, 2))
+                                    }
+                                </td>
+                                <td>@Helper.GetPaymentTypeValue(trans.PaymentTypeId)</td>
+                                <td>@trans.ChequeNumber</td>
+                                <td>@Helper.GetBankValue(trans.BankId)</td>
+                                <td>@Helper.GetStatusValue(trans.StatusId)</td>
+                                <td>
+                                    @if (trans.DateDue != null)
+                                    {
+                                        @trans.DateDue.Value.Date.ToShortDateString()
+                                    }
+                                </td>
+                                <td>
+                                    @if (@trans.Amount != null)
+                                    {
+                                        @String.Format(new System.Globalization.CultureInfo("yo-NG"), "{0:C}", @Math.Round((decimal) @trans.Amount, 2))
+                                    }
+                                </td>                              
+                                <td>@trans.ValueDate</td>
+                                <td>@trans.RecievingBank</td>
+                                <td>@Helper.GetBranchName(trans.AdminId)</td>
+                                <td>
+                                    @if (trans.DateCreated != null)
+                                    {
+                                        @trans.DateCreated.Value.Date.ToShortDateString()
+                                    }
+                                </td>
+                                <td>@Helper.GetDSEName(trans.Dse)</td>
+                                <td>@Helper.GetCompanyName(trans.Company)</td>
+                                <td>@trans.Phone</td>
+                            </tr>
+                        }
+                    }
+
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

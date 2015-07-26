@@ -1,0 +1,41 @@
+﻿@model FCL.Web.Models.LoginModel
+
+@{
+    ViewBag.Title = "Log in";
+}
+
+
+<section id="loginForm">
+
+    @using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <div id="fullscreen_bg" class="fullscreen_bg" />
+        <div class="container">
+            <div class="form-signin">
+                <h1 class="form-signin-heading text-muted">Sign In</h1>
+
+                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @placeholder = "Username" })
+                @Html.ValidationMessageFor(m => m.UserName)
+
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Password" })
+                @Html.ValidationMessageFor(m => m.Password)
+
+                <p>@Html.CheckBoxFor(m => m.RememberMe) @Html.LabelFor(m => m.RememberMe)</p>
+
+                <input class="btn btn-lg btn-primary btn-block" type="submit" value="Log in" />
+            </div>
+        </div>
+    }
+
+</section>
+
+<section class="social" id="socialLoginForm">
+    <h2>Use another service to log in.</h2>
+    @Html.Action("ExternalLoginsList", new { ReturnUrl = ViewBag.ReturnUrl })
+</section>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

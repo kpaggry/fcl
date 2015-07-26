@@ -1,0 +1,303 @@
+﻿@using FCL.Web.Controllers
+@using System.Web.Mvc
+@model FCL.Core.Models.LoanTransactions
+
+@{
+    ViewBag.Title = "Create";
+    var sample = Json.Encode(ViewData["Clients"]);
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        function alertMessages(element, message) {
+            element.find(".status").empty();
+            element.find(".status").append(message);
+            element.focus();
+            element.fadeIn(1000, function () {
+                element.fadeOut(10000);
+            });
+        }
+
+        console.log('@sample');
+
+        $(document).on("focus", ".datepicker", function () {
+            $(this).datepicker();
+        });
+        //$(".datepicker").datepicker("update");
+
+        $(document).on("click", ".clickOptions .addCheque", function () {
+            var current = $(this).closest(".form-group");
+            $.ajax({
+                url: "/Cheque/NewChequeRow",
+                cache: false,
+                success: function (html) {
+                    $(html).insertAfter(current);
+                }
+            });
+        });
+
+        $(".totalAmount").change(function () {
+            var x = parseInt($(this).val());
+
+            if (x >= 100000) {
+                $(".standIn").show();
+            } else {
+                $(".standIn").hide();
+            }
+            $(this).attr("id", $(this).val());
+            $(this).formatCurrency();
+        });
+
+        $(document).on("change", ".cheques .chequeAmount", function () {
+            $(this).attr("id", $(this).val());
+            $(this).formatCurrency();
+        });
+
+        $(".clientName").change(function () {
+            $(this).closest(".form-group").find(".clientId").val($(this).val());
+        });
+        
+        $(document).on("click", ".clickOptions .removeCheque", function () {
+            $(this).closest(".cheques").remove();
+        });
+
+        function validate() {
+            if ($(".totalAmount").attr("id") === "TotalAmount" || $(".clientId").val() === 0 || $(".duration").val() === "") {
+                return 0;
+            }
+
+            $(".cheques").each(function() {
+                if ($(this).find(".paymentType").val() === "" || $(this).find(".chequeNumber").val() === "" || $(this).find(".chequeAmount").attr("id") || $(this).find(".chequeBankId").val() || $(this).find(".chequeDueDate").val() === "" || $(this).find(".chequeStatus").val() === "")
+                    return 0;
+            });
+
+            return 1;
+        }
+
+        $(document).on("click", ".row .finalizeLoan", function () {
+            var element = $(this);
+            var viewModel = [];
+            var cheques = [];
+            var context = $(this).closest(".row").find(".success");
+            var contextWarning = $(this).closest(".row").find(".warning");
+
+            if (validate() === 1) {
+                $(this).closest(".row").find(".cheques").each(function () {
+                    cheques.push({
+                        'PaymentTypeId': $(this).find(".paymentType").val(),
+                        'ChequeId': $(this).find(".chequeId").val(),
+                        'ChequeNumber': $(this).find(".chequeNumber").val(),
+                        'BankId': $(this).find(".chequeBankId").val(),
+                        //'Amount': $(this).find(".chequeAmount").val(),
+                        'Amount': $(this).find(".chequeAmount").attr("id"),
+                        'StatusId': $(this).find(".chequeStatus").val(),
+                        'DateDue': $(this).find(".chequeDueDate").val(),
+                        //'PaidCash': $(this).find(".chequePaidCash").is(":checked")
+                    });
+                });
+
+                var guarantorModel = {
+                    GuarantorId: $(".guaranteeId").val(),
+                    LoanId: $(".guaranteeLoanId").val(),
+                    Name: $(".guaranteeName").val(),
+                    PhoneNumber: $(".guaranteePhone").val(),
+                    NameOnCheque: $(".guaranteeChequeName").val(),
+                    ChequeNumber: $(".guaranteeNumber").val(),
+                    Bank: $(".guaranteeBankId").val(),
+                    StatusId: $(".guaranteeStatus").val()
+                };
+
+                viewModel = {
+                    ClientId: $(this).closest(".row").find(".clientId").val(),
+                    TotalAmount: $(this).closest(".row").find(".totalAmount").attr("id"),
+                    DurationId: $(this).closest(".row").find(".duration").val(),
+                    LoanIdForCore: $(this).closest(".row").find(".loanIdforCore").val(),
+                    Cheques: cheques,
+                    Guarantee: guarantorModel
+                };
+
+                console.log(viewModel);
+
+                element.hide();
+                element.closest(".col-sm-2").find(".loading").show();
+
+                $.ajax({
+                    url: "/Cheque/AddChequeInfo",
+                    type: "POST",
+                    data: JSON.stringify(viewModel),
+                    dataType: "json",
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (data) {
+                        console.log(data);
+                        context.find(".loanId").val(data.LoanId);
+                        element.show();
+                        element.closest(".col-sm-2").find(".loading").hide();
+                        element.attr("disabled", true);
+                        alertMessages(context, " Loan information has been successfully saved.");
+                    }
+                });
+            } else {
+                alertMessages(contextWarning, " Kindly check your fields, Some have not been properly filled.");
+            }
+
+            
+        });
+    });
+</script>
+
+<div class="row">
+        @using (Html.BeginForm("Create", "Cheque", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <br />
+            <fieldset>
+                <legend>Loan Information</legend>
+                <div class="loanInfoSection">
+                    <div class="col-sm-12">
+                        <div class="success" style="display: none">
+                            <div class="alert alert-success">
+                                <span class="glyphicon glyphicon-ok"></span> <strong>Success!</strong><span class="status"></span>
+                            </div>
+                        </div>
+                        <div class="warning" style="display: none">
+                            <div class="alert alert-warning warning">
+                                <span class="glyphicon glyphicon-record"></span> <strong>Warning</strong> &nbsp; <span class="status"></span>
+                            </div>
+                        </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    @Html.DropDownListFor(model => model.ClientName, new SelectList((IEnumerable<SelectListItem>)ViewData["Clients"], "Value", "Text"), "--Choose a Client--", new { @class = "form-control clientName" })
+                                </div>
+                                <div class="col-sm-6">
+                                    @Html.TextBoxFor(model => model.LoanIdForCore, new { @class = "form-control loanIdforCore", @placeholder = "Loan Id From Core Application" })
+                                    @Html.HiddenFor(model => model.LoanId, new {@class = "form-control loanId", @placeholder = "LoanId"})
+                                    @Html.HiddenFor(model => model.ClientId, new {@class = "form-control clientId", @placeholder = "ClientId"})
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    @Html.TextBoxFor(model => model.TotalAmount, new { @class = "form-control totalAmount", @placeholder = "Total Amount" })
+                                    @Html.ValidationMessageFor(model => model.TotalAmount)
+                                </div>
+                                <div class="col-sm-6">
+                                    @Html.DropDownListFor(model => model.DurationId, new SelectList((IEnumerable<SelectListItem>)ViewData["Duration"], "Value", "Text"), "--Choose a Duration--", new { @class = "form-control duration" })
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </fieldset>
+
+            <fieldset>@*<div class="success" style="display: none">
+        <div class="alert alert-success">
+            <span class="glyphicon glyphicon-ok"></span> <strong>Success!</strong><span class="status"></span>
+        </div>
+    </div>
+    <div class="alert alert-warning warning" style="display: none">
+        <span class="glyphicon glyphicon-record"></span> <strong>Warning</strong> &nbsp; <span class="status"></span>
+    </div>*@
+                <legend>Payment Mode</legend>
+                <div class="chequePanel">
+
+                    <div class="col-sm-12">
+                        <div class="col-sm-1">
+                            <h6>Type</h6>
+                        </div>
+                        <div class="col-sm-1">
+                            <h6>Number</h6>
+                        </div>
+                        <div class="col-sm-2">
+                            <h6>Choose Bank</h6>
+                        </div>
+                        <div class="col-sm-1">
+                            <h6>Amount</h6>
+                        </div>
+                        <div class="col-sm-1">
+                            <h6>Status</h6>
+                        </div>
+                        <div class="col-sm-1">
+                            <h6>Date Due</h6>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <div id="editorRows" class="chequeSection">
+                                @foreach (var cheque in Model.Cheques)
+                                {
+                                    @Html.Partial("../Partials/_Cheque", cheque)
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+    <div class="standIn" style="display: none">
+        <fieldset>
+            <legend>Add Gurantor</legend>
+            <div class="chequePanel">
+
+                <div class="col-sm-12">
+                    <div class="col-sm-2">
+                        <h5>Name</h5>
+                    </div>
+                    <div class="col-sm-2">
+                        <h5>Phone #</h5>
+                    </div>
+                    <div class="col-sm-2">
+                        <h5>Name On Cheque</h5>
+                    </div>
+                    <div class="col-sm-1">
+                        <h5>Cheque #</h5>
+                    </div>
+                    <div class="col-sm-2">
+                        <h5>Bank</h5>
+                    </div>
+                    <div class="col-sm-1">
+                        <h5>Status</h5>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <div id="editorRow" class="guarantorSection">
+                            <div class="form-group guarantor">
+                                <div class="col-sm-12">
+                                    <div class="col-sm-2">
+                                        @Html.TextBoxFor(model => model.Guarantee.Name, new { @class = "form-control guaranteeName", @placeholder = "Name" })
+                                        @Html.HiddenFor(model => model.Guarantee.GuarantorId, new { @class = "guaranteeId" })
+                                        @Html.HiddenFor(model => model.Guarantee.LoanId, new { @class = "guaranteeLoanId" })
+                                    </div>
+                                    <div class="col-sm-2">
+                                        @Html.TextBoxFor(model => model.Guarantee.PhoneNumber, new { @class = "form-control guaranteePhone", @placeholder = "Phone #" })
+                                    </div>
+                                    <div class="col-sm-2">
+                                        @Html.TextBoxFor(model => model.Guarantee.NameOnCheque, new { @class = "form-control guaranteeChequeName", @placeholder = "Cheque Name" })
+                                    </div>
+                                    <div class="col-sm-1">
+                                        @Html.TextBoxFor(model => model.Guarantee.ChequeNumber, new { @class = "form-control guaranteeNumber", @placeholder = "Cheque #" })
+                                    </div>
+                                    <div class="col-sm-2">
+                                        @Html.DropDownListFor(model => model.Guarantee.Bank, new SelectList((IEnumerable<SelectListItem>)ViewData["Banks"], "Value", "Text"), "--Select Bank--", new { @class = "form-control guaranteeBankId" })
+                                    </div>
+                                    <div class="col-sm-1">
+                                        @Html.DropDownListFor(model => model.Guarantee.Status, new SelectList((IEnumerable<SelectListItem>)ViewData["Status"], "Value", "Text"), "--Status--", new { @class = "form-control guaranteeStatus" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+            <div class="col-sm-12">
+                <div class="col-sm-2">
+                    <button class="btn-info btn btn-sm finalizeLoan" type="button">Finish</button>
+                    <div class="loading" style="display: none"><img src="~/Images/loader-32x/loader1.gif" /></div>
+                </div>
+                <div class="col-sm-10"></div>
+            </div>
+        }
+</div>

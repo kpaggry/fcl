@@ -1,0 +1,76 @@
+﻿@model IEnumerable<FCL.Core.DataAccess.UserProfile>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<br />
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-2">
+                @Html.ActionLink("Create New", "CreateAdmin", "Admin", null, new { @class = "btn-primary btn-block btn" })
+            </div>
+        </div>
+        <div class="col-md-12">
+            <h4>Manage Admins</h4>
+            <div class="table-responsive">
+                <form action="." method="post">
+                    <table class="table table-bordred table-striped" id="clientsTable">
+                        <thead>
+                            <tr>
+                                <th class="sorting">
+                                    @Html.DisplayName("First Name")
+                                </th>
+                                <th class="sorting">
+                                    @Html.DisplayName("Last Name")
+                                </th>
+                                <th class="sorting">
+                                    @Html.DisplayName("Email")
+                                </th>
+                                <th class="sorting">
+                                    @Html.DisplayName("Phone Number")
+                                </th>
+                                <th class="sorting">
+                                    @Html.DisplayName("Date Created")
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                if (!Roles.IsUserInRole(item.UserName, "Clients"))
+                                {
+                                    <tr style="font-family: Arial; font-size: small; color: Gray; font-weight: normal; font-style: italic">
+                                        <td>
+                                            <label><b>@item.FirstName</b></label>
+                                        </td>
+                                        <td>
+                                            <label><b>@item.LastName</b></label>
+                                        </td>
+                                        <td>
+                                            <label><a href="mailto:" @item.Email>@item.Email</a></label>
+                                        </td>
+                                        <td>
+                                            <label><b>@item.Phone</b></label>
+                                        </td>
+                                        <td>
+                                            <label><b>@string.Format("{0:dd/MM/yyyy}", WebSecurity.GetCreateDate(item.UserName))</b></label>
+                                        </td>
+                                        <td>
+                                            @Html.ActionLink("Edit User", "EditAdmin", new { id = item.UserId })
+                                            @*| @Html.ActionLink("User Details", "ClientDetails", new { id = item.UserId }) |*@
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

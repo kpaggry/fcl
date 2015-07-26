@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C41113CB-0D18-427F-ADC9-57AE47614152}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FCL.Core</RootNamespace>
+    <AssemblyName>FCL.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DataAccess\Bank.cs">
+      <DependentUpon>FCLEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccess\ChequeTransaction.cs">
+      <DependentUpon>FCLEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccess\Company.cs">
+      <DependentUpon>FCLEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccess\DSE.cs">
+      <DependentUpon>FCLEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccess\Duration.cs">
+      <DependentUpon>FCLEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccess\FCLBranch.cs">
+      <DependentUpon>FCLEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccess\FCLEntities.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FCLEntities.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccess\FCLEntities.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FCLEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccess\FCLEntities.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FCLEntities.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccess\Guarantor.cs">
+      <DependentUpon>FCLEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccess\LoanPaymentType.cs">
+      <DependentUpon>FCLEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccess\LoanStatu.cs">
+      <DependentUpon>FCLEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccess\LoanTransaction.cs">
+      <DependentUpon>FCLEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccess\UserProfile.cs">
+      <DependentUpon>FCLEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccess\webpages_Membership.cs">
+      <DependentUpon>FCLEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccess\webpages_Roles.cs">
+      <DependentUpon>FCLEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FCLManager.cs" />
+    <Compile Include="Helpers.cs" />
+    <Compile Include="Models\ViewModels.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="DataAccess\FCLEntities.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>FCLEntities.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <None Include="DataAccess\FCLEntities.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>FCLEntities.edmx</DependentUpon>
+      <LastGenOutput>FCLEntities.Context.cs</LastGenOutput>
+    </None>
+    <None Include="DataAccess\FCLEntities.edmx.diagram">
+      <DependentUpon>FCLEntities.edmx</DependentUpon>
+    </None>
+    <None Include="DataAccess\FCLEntities.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>FCLEntities.edmx</DependentUpon>
+      <LastGenOutput>FCLEntities.cs</LastGenOutput>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

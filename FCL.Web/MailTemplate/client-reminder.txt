@@ -1,0 +1,9 @@
+Dear {0},
+ 
+Your payment of {1} is due on {2}. Please fund your account or make payment to any of our accounts below, with your full name as depositor. Returned cheques are reported to CBN with a penalty of N5,000. Late payment penalty also apply
+ 
+Account Name: Fast Credit Ltd
+Zenith Bank: 1013976629
+First Bank: 2026693813
+For enquiries, call  01-2917931 or Email collections@fastcredit-ng.com
+Regards

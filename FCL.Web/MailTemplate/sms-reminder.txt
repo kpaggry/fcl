@@ -1,0 +1,1 @@
+Dear Customer, Please note that your cheque {0} of amount NGN{1} will be due to be cashed on {2}. Many Thanks

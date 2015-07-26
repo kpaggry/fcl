@@ -1,0 +1,5 @@
+Hello Admin,
+
+Please note that as at Today {0}, cheque {1} of amount NGN{2} will be due to be cashed on {3}.
+
+Many Thanks

@@ -1,0 +1,70 @@
+﻿@model IEnumerable<FCL.Core.DataAccess.LoanTransaction>
+@using FCL.Web.Helper
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<br />
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-2">
+                @Html.ActionLink("Create New", "Create", "Cheque", null, new { @class = "btn-primary btn-block btn" })
+            </div>
+        </div>
+        <div class="col-md-12">
+            <h4>Manage Clients</h4>
+            <div class="table-responsive">
+                <form action="." method="post">
+                    <table class="table table-bordred table-striped" id="clientsTable">
+                        <thead>
+                            <tr>
+                                <th class="sorting">
+                                    @Html.DisplayName("Client Name")
+                                </th>
+                                <th class="sorting">
+                                    @Html.DisplayName("Total Amount")
+                                </th>
+                                <th class="sorting">
+                                    @Html.DisplayName("Duration")
+                                </th>
+                                <th class="sorting">
+                                    @Html.DisplayName("Date Created")
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr style="font-family: Arial; font-size: small; color: Gray; font-weight: normal; font-style: italic">
+                                    <td>
+                                        <label><b>@Helper.GetFullName(item.ClientId)</b></label>
+                                    </td>
+                                    <td>
+                                        <label><b>@item.TotalAmount</b></label>
+                                    </td>
+                                    <td>
+                                        <label><b>@Helper.GetDurationValue(item.DurationId)</b></label>
+                                    </td>
+                                    <td>
+                                        <label><b>@string.Format("{0:dd/MM/yyyy}", item.DateCreated)</b></label>
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("Edit Loan", "EditLoan", new { id = item.LoanId })
+                                        @Html.ActionLink("View Loan", "ViewLoan", new { id = item.LoanId })
+                                        @*| @Html.ActionLink("User Details", "ClientDetails", new { id = item.UserId }) |*@
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+

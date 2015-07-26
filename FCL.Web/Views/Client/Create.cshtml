@@ -1,0 +1,113 @@
+﻿@model FCL.Core.Models.ViewModels
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<div class="row">
+    <div class="col-md-4 col-md-offset-4">
+        @using (Html.BeginForm("Create", "Client", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+
+            <fieldset>
+                <legend>Fill in the details below to register a client.</legend>
+                <div id="success" style="display:none">
+                    <div class="alert alert-success">
+                        <span class="glyphicon glyphicon-ok"></span> <strong>Success!</strong><span class="status"></span>
+                    </div>
+                </div>
+                <div class="alert alert-warning" id="warning" style="display:none">
+                    <span class="glyphicon glyphicon-record"></span> <strong>Warning</strong> &nbsp; <span class="status"></span>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        @Html.TextBoxFor(model => model.UserName, new { @class = "form-control", @placeholder = "Username" })
+                        @Html.ValidationMessageFor(model => model.UserName)
+                    </div>
+                    <div class="col-sm-6">
+                        @Html.PasswordFor(model => model.Password, new { @class = "form-control", @placeholder = "password" })
+                        @Html.ValidationMessageFor(model => model.Password)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        @Html.PasswordFor(model => model.ConfirmPassword, new { @class = "form-control", @placeholder = "Confirm Password" })
+                        @Html.ValidationMessageFor(model => model.ConfirmPassword)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @placeholder = "example@example.com" })
+                        @Html.ValidationMessageFor(model => model.Email)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", @placeholder = "First Name" })
+                        @Html.ValidationMessageFor(model => model.FirstName)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        @Html.TextBoxFor(model => model.LastName, new { @class = "form-control", @placeholder = "Last Name" })
+                        @Html.ValidationMessageFor(model => model.LastName)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        @Html.TextBoxFor(model => model.Phone, new {@class = "form-control", @placeholder = "Phone Number"})
+                        @Html.ValidationMessageFor(model => model.Phone)
+                    </div>
+                    <div class="col-sm-6">
+                        @Html.TextBoxFor(model => model.ClientId, new { @class = "form-control", @placeholder = "Client ID" })
+                        @Html.ValidationMessageFor(model => model.ClientId)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        @Html.DropDownListFor(model => model.DseId, ViewBag.DseList as IEnumerable<SelectListItem>, "--Select DSE--", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Phone)
+                    </div>
+                    <div class="col-sm-6">
+                        @Html.DropDownListFor(model => model.CompanyId, ViewBag.CompanyList as IEnumerable<SelectListItem>, "--Select Company--", new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <p>
+                    <input class="btn btn-lg btn-primary btn-block" type="submit" value="Create Client" />
+                </p>
+            </fieldset>
+        }
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        function alertMessages(message, type) {
+            var element = $('#' + type);
+            element.find('.status').empty();
+            element.find('.status').append(message);
+            element.fadeIn(1000, function () {
+                element.fadeOut(10000);
+            });
+        }
+
+        var status = '@TempData["status"]';
+
+        if (status === "Success") {
+            alertMessages(" Client has been successfully created!", "success");
+        }else if (status === "Error") {
+            alertMessages(" User Name and/or Email already exist in this application", "warning");
+        }
+
+    });
+</script>

@@ -1,0 +1,135 @@
+﻿@model IEnumerable<FCL.Core.Models.ReportView>
+@using FCL.Web.Helper
+@using FCL.Core.Models
+
+@{
+    ViewBag.Title = "GenerateReport";
+}
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(document).on("focus", ".datepicker", function () {
+            $(".datepicker").datepicker({
+                startDate: '-3d'
+            }).on('changeDate', function (e) {
+                $(this).datepicker('hide');
+            });
+        });
+    });
+</script>
+
+<h2>Generate Report</h2>
+@if ((string) TempData["PostBack"] == "Yes")
+{
+   var x = (SearchValues) ViewBag.SearchObj;
+   @Html.ActionLink("Export to Excel", "ExportAsExl", new { startDate = x.StartDate, endDate = x.EndDate, bank = x.BankId, paymentType = x.PaymentType }, new { @class = "btn-info btn btn-sm" })
+}
+
+
+<div class="row">
+    @using (Html.BeginForm("GenerateReport", "Cheque", FormMethod.Post, new {@class = "form-inline"}))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+            <div class="form-group">
+                    <input type="text" class="form-control datepicker" placeholder="Start Date" name="startDate">
+            </div>
+            <div class="form-group">
+                    <input type="text" class="form-control datepicker" placeholder="End Date" name="endDate">
+            </div>
+            <div class="form-group">
+                    @Html.DropDownList("bank", new SelectList((IEnumerable<SelectListItem>) ViewData["Banks"], "Value", "Text"), "--Select Bank--", new {@class = "form-control"})
+            </div>
+            <div class="form-group">
+                    @Html.DropDownList("paymentType", new SelectList((IEnumerable<SelectListItem>) ViewData["PaymentType"], "Value", "Text"), "--Type--", new {@class = "form-control"})
+            </div>
+            <div class="form-group">
+                    @Html.DropDownList("status", new SelectList((IEnumerable<SelectListItem>)ViewData["Status"], "Value", "Text"), "--Status--", new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                    @Html.DropDownList("branch", new SelectList((IEnumerable<SelectListItem>)ViewData["Branches"], "Value", "Text"), "--Branch--", new { @class = "form-control" })
+            </div>
+                    <button type="submit" class="btn-info btn btn-sm">Search</button>
+    }
+</div>
+
+<div class="row">
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover table-striped">
+            <thead>
+            <tr>
+                <th>Loan ID</th>
+                <th>Client ID</th>
+                <th>ClientName</th>
+                <th>Loan Amount</th>
+                <th>Payment Type</th>
+                <th>Cheque Number</th>
+                <th>Bank Name</th>
+                <th>Status</th>
+                <th>Date Due</th>
+                <th>Amount</th>               
+                <th>Value Date</th>
+                <th>Recieving Bank</th>
+                <th>Branch</th>
+                <th>Date Created</th>
+                <th>DSE</th>
+                <th>Company</th>
+                <th>Phone</th>
+            </tr>
+            </thead>
+            <tbody>
+            @{
+                if (Model != null)
+                {
+                    foreach (var trans in Model)
+                    {
+                        <tr>
+                            <td>@trans.LoanIdFromCore</td>
+                            <td>@trans.ClientIdFromCore</td>
+                            <td>@trans.ClientName</td>
+                            <td>
+                                @if (@trans.LoanAmount != null)
+                                {
+                                    @String.Format(new System.Globalization.CultureInfo("yo-NG"), "{0:C}", @Math.Round((decimal)@trans.LoanAmount, 2))
+                                }
+                            </td>
+                            <td>@Helper.GetPaymentTypeValue(trans.PaymentTypeId)</td>
+                            <td>@trans.ChequeNumber</td>
+                            <td>@Helper.GetBankValue(trans.BankId)</td>
+                            <td>@Helper.GetStatusValue(trans.StatusId)</td>
+                            <td>
+                                @if (trans.DateDue != null)
+                                {
+                                    @trans.DateDue.Value.Date.ToShortDateString()
+                                }
+                            </td>
+                            <td>
+                                @if (@trans.Amount != null)
+                                {
+                                    @String.Format(new System.Globalization.CultureInfo("yo-NG"), "{0:C}", @Math.Round((decimal) @trans.Amount, 2))
+                                }
+                            </td>
+                            <td>@trans.ValueDate</td>
+                            <td>@trans.RecievingBank</td>
+                            <td>@Helper.GetBranchName(trans.BranchId)</td>
+                            <td>
+                                @if (trans.DateCreated != null)
+                                {
+                                    @trans.DateCreated.Value.Date.ToShortDateString()
+                                }
+                            </td>
+                            <td>@Helper.GetDSEName(trans.Dse)</td>
+                            <td>@Helper.GetCompanyName(trans.Company)</td>
+                            <td>@trans.Phone</td>
+                        </tr>
+                    }
+                }
+
+            }
+            </tbody>
+        </table>
+        @*@Html.PagedListPager((IPagedList)ViewBag.OnePage, page => Url.Action("GenerateReport", new { page }))*@
+    </div>
+
+</div>
+
