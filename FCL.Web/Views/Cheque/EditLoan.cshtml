@@ -139,6 +139,7 @@
                         console.log(data);
                         context.find(".loanId").val(data.LoanId);
                         element.closest(".col-sm-2").find(".loading").hide();
+                        element.attr("disabled", true);
                         alertMessages(context, " Loan information has been successfully saved.");
                     }
                 });

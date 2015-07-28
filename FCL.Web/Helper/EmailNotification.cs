@@ -23,10 +23,13 @@ namespace FCL.Web.Helper
         {
             var cheques = _manager.GetAllPendingCheques();
 
-            foreach (var x in cheques.Where(x => x.DateDue != null && CheckDate((DateTime)x.DateDue)))
+            foreach (var c in cheques)
             {
-                SendMailToClient(x);
-                SendMailToAdmin(x);
+                if (c.DateDue != null && CheckDate((DateTime)c.DateDue))
+                {
+                    SendMailToClient(c);
+                    SendMailToAdmin(c);
+                }
             }
         }
 
@@ -40,7 +43,8 @@ namespace FCL.Web.Helper
 
         public static bool CheckDate(DateTime dueDate)
         {
-            return (dueDate.Date - DateTime.Now.Date).TotalDays <= 3;
+            var x = (dueDate.Date - DateTime.Now.Date).TotalDays;
+            return x > 0 && x <= 3;
         }
 
         public static void SendMailToClient(ChequeTransaction cheque)

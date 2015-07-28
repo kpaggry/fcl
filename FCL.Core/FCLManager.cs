@@ -9,7 +9,6 @@ namespace FCL.Core
     public class FclManager
     {
         private FCLDataEntities _db;
-        private int _loanId;
         private static DateTime _myDate = DateTime.Now;
         private static DateTime _startOfMonth = new DateTime(_myDate.Year, _myDate.Month, 1);
         private static readonly DateTime EndOfMonth = _startOfMonth.AddMonths(1).AddDays(-1);
@@ -24,9 +23,8 @@ namespace FCL.Core
         private static int _statusGrandTotalCount;
         public decimal BankGrandTotalMonth;
 
-        public FclManager(int loanId)
+        public FclManager()
         {
-            _loanId = loanId;
             _db = new FCLDataEntities();
         }
 

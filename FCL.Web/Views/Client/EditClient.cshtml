@@ -79,7 +79,7 @@
                 </div>
 
                 <p>
-                    <input class="btn btn-lg btn-primary btn-block" type="submit" value="Edit Client" />
+                    <input class="btn btn-lg btn-primary btn-block" type="submit" value="Edit Client" id="submit-button" />
                 </p>
             </fieldset>
         }
@@ -101,6 +101,7 @@
 
         if (status === "Success") {
             alertMessages(" Client has been successfully created!", "success");
+            $("#submit-button").attr("disabled", true);
         }else if (status === "Error") {
             alertMessages(" User Name and/or Email already exist in this application", "warning");
         }
