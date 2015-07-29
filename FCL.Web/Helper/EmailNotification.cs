@@ -51,17 +51,17 @@ namespace FCL.Web.Helper
         {
             var custInfo = _manager.GetCustomerInfo(cheque.LoanId);
             var body = FormatBody(cheque, custInfo);
-            var sms = FormatBodySMS(cheque);
+            var sms = FormatBodySms(cheque, custInfo.FirstName);
 
             SendMail(custInfo.Email, body);
             SendText(custInfo.Phone, sms);
         }
 
-        private static string FormatBodySMS(ChequeTransaction cheque)
+        private static string FormatBodySms(ChequeTransaction cheque, string name)
         {
             return String.Format(
-                            File.ReadAllText(HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["sms-reminder"]))
-                            , cheque.ChequeNumber, cheque.Amount, cheque.DateDue);
+                            File.ReadAllText(System.Web.Hosting.HostingEnvironment.MapPath(ConfigurationManager.AppSettings["sms-reminder"]))
+                            , name, String.Format(new System.Globalization.CultureInfo("yo-NG"), "{0:C}", @Math.Round((decimal)cheque.Amount, 2)), cheque.DateDue.Value.Date.ToShortDateString());
         }
 
         private static void SendMail(string email, string body)
@@ -70,7 +70,7 @@ namespace FCL.Web.Helper
             var reciever = email;
 
             SmtpClient smtpClient = new SmtpClient();
-            MailMessage mail = new MailMessage { From = new MailAddress(smtpEmail, "Deposit Reminder") };
+            MailMessage mail = new MailMessage { From = new MailAddress(smtpEmail, "FastCredit") };
 
             //Setting From , To and CC
             mail.To.Add(new MailAddress(reciever));
@@ -93,15 +93,15 @@ namespace FCL.Web.Helper
         public static string FormatBody(ChequeTransaction cheque, UserProfile user)
         {
             return String.Format(
-                            File.ReadAllText(HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["ClientReminder"]))
-                            , user.FirstName, cheque.Amount, cheque.DateDue);
+                            File.ReadAllText(System.Web.Hosting.HostingEnvironment.MapPath(ConfigurationManager.AppSettings["ClientReminder"]))
+                            , user.FirstName, String.Format(new System.Globalization.CultureInfo("yo-NG"), "{0:C}", @Math.Round((decimal)cheque.Amount, 2)), cheque.DateDue.Value.Date.ToShortDateString());
         }
 
         public static string FormatBody(ChequeTransaction cheque)
         {
             return String.Format(
-                            File.ReadAllText(HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["AdminReminder"]))
-                            , DateTime.Now.ToShortDateString(), cheque.ChequeNumber, cheque.Amount, cheque.DateDue);
+                            File.ReadAllText(System.Web.Hosting.HostingEnvironment.MapPath(ConfigurationManager.AppSettings["AdminReminder"]))
+                            , DateTime.Now.ToShortDateString(), cheque.ChequeNumber, String.Format(new System.Globalization.CultureInfo("yo-NG"), "{0:C}", @Math.Round((decimal)cheque.Amount, 2)), cheque.DateDue.Value.Date.ToShortDateString());
         }
     }
 
@@ -114,14 +114,20 @@ namespace FCL.Web.Helper
 
             IJobDetail job = JobBuilder.Create<EmailNotification>().Build();
 
+            //ITrigger trigger = TriggerBuilder.Create()
+            //    .StartNow()
+            //    .WithSimpleSchedule(x => x
+            //        .WithIntervalInSeconds(300)
+            //        .RepeatForever())
+            //    .Build();
+
             ITrigger trigger = TriggerBuilder.Create()
                 .WithDailyTimeIntervalSchedule
                   (s =>
                      s.WithIntervalInHours(24)
                     .OnEveryDay()
                     .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(10, 0))
-                  )
-                .Build();
+                  ).Build();
 
             scheduler.ScheduleJob(job, trigger);
         }

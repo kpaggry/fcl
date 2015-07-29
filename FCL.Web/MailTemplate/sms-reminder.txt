@@ -1,1 +1,6 @@
-Dear Customer, Please note that your cheque {0} of amount NGN{1} will be due to be cashed on {2}. Many Thanks
+Dear {0},
+Your payment of {1} is due on {2}. Please fund your account or make payment to Zenith Bank: 1013976629 with your full name as depositor.
+Returned cheques are reported to CBN with a penalty of N5,000. 
+Late payment penalty also apply.
+Enquiries, call 01-2917931 or Email collections@fastcredit-ng.com 
+Regards
