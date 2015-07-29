@@ -5,20 +5,19 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="91f6097f8332488591b4372d965a24ed" Name="Diagram1">
-        <EntityTypeShape EntityType="FCLDataModel.UserProfile" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
         <EntityTypeShape EntityType="FCLDataModel.webpages_Membership" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="FCLDataModel.webpages_Roles" Width="1.5" PointX="0.75" PointY="0.875" IsExpanded="true" />
-        <AssociationConnector Association="FCLDataModel.webpages_UsersInRoles" ManuallyRouted="false" />
         <EntityTypeShape EntityType="FCLDataModel.Bank" Width="1.5" PointX="5" PointY="3.875" />
         <EntityTypeShape EntityType="FCLDataModel.Guarantor" Width="1.5" PointX="7" PointY="0.875" />
         <EntityTypeShape EntityType="FCLDataModel.ChequeTransaction" Width="1.5" PointX="13.25" PointY="0.75" />
         <EntityTypeShape EntityType="FCLDataModel.LoanTransaction" Width="1.5" PointX="5.125" PointY="0.5" />
         <EntityTypeShape EntityType="FCLDataModel.Duration" Width="1.5" PointX="6.625" PointY="5.375" />
         <EntityTypeShape EntityType="FCLDataModel.LoanPaymentType" Width="1.5" PointX="5" PointY="5.5" />
-        <EntityTypeShape EntityType="FCLDataModel.LoanStatu" Width="1.5" PointX="3.125" PointY="4.875" />
+        <EntityTypeShape EntityType="FCLDataModel.LoanStatu" Width="1.5" PointX="9.25" PointY="2.5" />
         <EntityTypeShape EntityType="FCLDataModel.FCLBranch" Width="1.5" PointX="8" PointY="7.375" />
         <EntityTypeShape EntityType="FCLDataModel.Company" Width="1.5" PointX="0.75" PointY="7.75" />
         <EntityTypeShape EntityType="FCLDataModel.DSE" Width="1.5" PointX="2.75" PointY="7.75" />
+        <EntityTypeShape EntityType="FCLDataModel.UserProfile" Width="1.5" PointX="2.625" PointY="2.625" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

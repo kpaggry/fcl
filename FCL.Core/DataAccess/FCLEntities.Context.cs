@@ -25,7 +25,6 @@ namespace FCL.Core.DataAccess
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<UserProfile> UserProfiles { get; set; }
         public virtual DbSet<webpages_Membership> webpages_Membership { get; set; }
         public virtual DbSet<webpages_Roles> webpages_Roles { get; set; }
         public virtual DbSet<Bank> Banks { get; set; }
@@ -38,5 +37,6 @@ namespace FCL.Core.DataAccess
         public virtual DbSet<FCLBranch> FCLBranches { get; set; }
         public virtual DbSet<Company> Companies { get; set; }
         public virtual DbSet<DSE> DSEs { get; set; }
+        public virtual DbSet<UserProfile> UserProfiles { get; set; }
     }
 }

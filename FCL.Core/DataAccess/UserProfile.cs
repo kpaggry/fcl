@@ -14,11 +14,6 @@ namespace FCL.Core.DataAccess
     
     public partial class UserProfile
     {
-        public UserProfile()
-        {
-            this.webpages_Roles = new HashSet<webpages_Roles>();
-        }
-    
         public int UserId { get; set; }
         public string UserName { get; set; }
         public string FirstName { get; set; }
@@ -28,14 +23,12 @@ namespace FCL.Core.DataAccess
         public string EmployerName { get; set; }
         public Nullable<System.DateTime> DateCreated { get; set; }
         public Nullable<System.DateTime> DateModified { get; set; }
-        public Nullable<int> ClientId { get; set; }
+        public string ClientId { get; set; }
         public Nullable<int> BranchId { get; set; }
         public Nullable<bool> CanCreate { get; set; }
         public Nullable<bool> CanEdit { get; set; }
         public Nullable<int> AdminId { get; set; }
         public Nullable<int> DseId { get; set; }
         public Nullable<int> CompanyId { get; set; }
-    
-        public virtual ICollection<webpages_Roles> webpages_Roles { get; set; }
     }
 }

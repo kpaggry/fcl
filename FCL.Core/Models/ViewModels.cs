@@ -38,7 +38,6 @@ namespace FCL.Core.Models
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
-        [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
@@ -46,7 +45,7 @@ namespace FCL.Core.Models
         [Display(Name = "Phone Number")]
         public string Phone { get; set; }
 
-        public int? ClientId { get; set; }
+        public string ClientId { get; set; }
         public int? AdminId { get; set; }
     }
 
@@ -152,7 +151,7 @@ namespace FCL.Core.Models
         public int? Dse { get; set; }
         public int? Company { get; set; }
         public string Phone { get; set; }
-        public int? ClientIdFromCore { get; set; }
+        public string ClientIdFromCore { get; set; }
         public int? AdminId { get; set; }
         public int? BranchId { get; set; }
         public string ClientName { get; set; }
